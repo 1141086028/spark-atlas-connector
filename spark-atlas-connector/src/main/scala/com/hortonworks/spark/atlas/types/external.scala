@@ -19,14 +19,16 @@ package com.hortonworks.spark.atlas.types
 
 import java.io.File
 import java.net.{URI, URISyntaxException}
+import java.util.Date
 
 import com.hortonworks.spark.atlas.sql.KafkaTopicInformation
+import scala.collection.JavaConverters._
 import org.apache.atlas.AtlasConstants
 import org.apache.atlas.model.instance.{AtlasEntity, AtlasObjectId}
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hive.ql.session.SessionState
-import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, CatalogTable}
+import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, CatalogStorageFormat, CatalogTable}
 import com.hortonworks.spark.atlas.{AtlasUtils, SACAtlasEntityReference, SACAtlasEntityWithDependencies, SACAtlasReferenceable}
 import com.hortonworks.spark.atlas.utils.{JdbcUtils, SparkUtils}
 import org.apache.spark.sql.SparkSession
@@ -248,20 +250,116 @@ object external {
 
   def hiveTableToReference(
       tblDefinition: CatalogTable,
-      cluster: String,
+      clusterName: String,
       mockDbDefinition: Option[CatalogDatabase] = None): SACAtlasReferenceable = {
     val tableDefinition = SparkUtils.getCatalogTableIfExistent(tblDefinition)
     val db = SparkUtils.getDatabaseName(tableDefinition)
     val table = SparkUtils.getTableName(tableDefinition)
-    hiveTableToReference(db, table, cluster)
+    val dbDefinition = mockDbDefinition.getOrElse(SparkUtils.getExternalCatalog().getDatabase(db))
+
+    val dbEntity = hiveDbToEntity(dbDefinition, clusterName, tableDefinition.owner)
+    val sdEntity = hiveStorageFormatToEntity(tableDefinition.storage, db, table, clusterName)
+
+    val tblEntity = new AtlasEntity(metadata.TABLE_TYPE_STRING)
+
+    tblEntity.setAttribute("qualifiedName",
+      hiveTableUniqueAttribute(db, table, clusterName))
+    tblEntity.setAttribute("name", table)
+    tblEntity.setAttribute("tableType", tableDefinition.tableType.name)
+    tblEntity.setAttribute("schemaDesc", tableDefinition.schema.simpleString)
+    tblEntity.setAttribute("provider", tableDefinition.provider.getOrElse(""))
+    if (tableDefinition.tracksPartitionsInCatalog) {
+      tblEntity.setAttribute("partitionProvider", "Catalog")
+    }
+    tblEntity.setAttribute("partitionColumnNames", tableDefinition.partitionColumnNames.asJava)
+    tableDefinition.bucketSpec.foreach(
+      b => tblEntity.setAttribute("bucketSpec", b.toLinkedHashMap.asJava))
+    tblEntity.setAttribute("owner", tableDefinition.owner)
+    tblEntity.setAttribute("ownerType", "USER")
+    tblEntity.setAttribute("createTime", new Date(tableDefinition.createTime))
+    tblEntity.setAttribute("parameters", tableDefinition.properties.asJava)
+    tableDefinition.comment.foreach(tblEntity.setAttribute("comment", _))
+    tblEntity.setAttribute("unsupportedFeatures", tableDefinition.unsupportedFeatures.asJava)
+
+    tblEntity.setRelationshipAttribute("db", dbEntity.asObjectId)
+    tblEntity.setRelationshipAttribute("sd", sdEntity.asObjectId)
+
+    new SACAtlasEntityWithDependencies(tblEntity, Seq(dbEntity, sdEntity))
+
   }
 
   def hiveTableToReference(
       db: String,
       table: String,
       cluster: String): SACAtlasReferenceable = {
-    val qualifiedName = hiveTableUniqueAttribute(cluster, db, table)
-    SACAtlasEntityReference(
-      new AtlasObjectId(HIVE_TABLE_TYPE_STRING, "qualifiedName", qualifiedName))
+    val tblDefinition = SparkUtils.getExternalCatalog().getTable(db, table)
+    hiveTableToReference(tblDefinition, cluster)
   }
+
+  def hiveDbToEntity(dbDefinition: CatalogDatabase,
+                       cluster: String,
+                       owner: String): SACAtlasEntityWithDependencies = {
+    val dbEntity = new AtlasEntity(metadata.DB_TYPE_STRING)
+
+    dbEntity.setAttribute(
+      "qualifiedName", hiveDbUniqueAttribute(dbDefinition.name, cluster))
+    dbEntity.setAttribute(AtlasConstants.CLUSTER_NAME_ATTRIBUTE, cluster)
+    dbEntity.setAttribute("name", dbDefinition.name)
+    dbEntity.setAttribute("description", dbDefinition.description)
+    dbEntity.setAttribute("location", dbDefinition.locationUri.toString)
+    dbEntity.setAttribute("parameters", dbDefinition.properties.asJava)
+    dbEntity.setAttribute("owner", owner)
+    dbEntity.setAttribute("ownerType", "USER")
+
+    SACAtlasEntityWithDependencies(dbEntity)
+  }
+
+  def hiveDbUniqueAttribute(db: String,
+                             cluster: String): String = {
+    s"${db.toLowerCase}@$cluster"
+  }
+
+  def hiveStorageFormatToEntity(storageFormat: CatalogStorageFormat,
+                                  db: String,
+                                  table: String,
+                                  cluster: String): SACAtlasEntityWithDependencies = {
+    val sdEntity = new AtlasEntity(metadata.STORAGEDESC_TYPE_STRING)
+
+    sdEntity.setAttribute("qualifiedName",
+      hiveStorageFormatUniqueAttribute(db, table, cluster))
+    storageFormat.locationUri.foreach(uri => sdEntity.setAttribute("location", uri.toString))
+    storageFormat.inputFormat.foreach(sdEntity.setAttribute("inputFormat", _))
+    storageFormat.outputFormat.foreach(sdEntity.setAttribute("outputFormat", _))
+    storageFormat.serde.foreach(sdEntity.setAttribute("serde", _))
+    sdEntity.setAttribute("compressed", storageFormat.compressed)
+    sdEntity.setAttribute("parameters", storageFormat.properties.asJava)
+
+    SACAtlasEntityWithDependencies(sdEntity)
+  }
+
+  def hiveStorageFormatUniqueAttribute(
+                                         db: String,
+                                         table: String,
+                                         cluster: String): String = {
+    s"${db.toLowerCase}.${table.toLowerCase}@${cluster}_storage"
+  }
+
+//  def hiveTableToReference(
+//      tblDefinition: CatalogTable,
+//      cluster: String,
+//      mockDbDefinition: Option[CatalogDatabase] = None): SACAtlasReferenceable = {
+//    val tableDefinition = SparkUtils.getCatalogTableIfExistent(tblDefinition)
+//    val db = SparkUtils.getDatabaseName(tableDefinition)
+//    val table = SparkUtils.getTableName(tableDefinition)
+//    hiveTableToReference(db, table, cluster)
+//  }
+
+//  def hiveTableToReference(
+//      db: String,
+//      table: String,
+//      cluster: String): SACAtlasReferenceable = {
+//    val qualifiedName = hiveTableUniqueAttribute(cluster, db, table)
+//    SACAtlasEntityReference(
+//      new AtlasObjectId(HIVE_TABLE_TYPE_STRING, "qualifiedName", qualifiedName))
+//  }
 }

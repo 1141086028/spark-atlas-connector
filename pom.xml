@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.hortonworks.spark</groupId>
-  <artifactId>spark-atlas-connector-main_2.11</artifactId>
+  <artifactId>spark-atlas-connector-main</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -29,11 +29,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
-    <spark.version>2.4.0</spark.version>
-    <atlas.version>2.0.0</atlas.version>
+    <spark.version>2.4.3</spark.version>
+<!--    <atlas.version>2.0.0</atlas.version>-->
+    <atlas.version>1.2.0</atlas.version>
     <maven.version>3.5.4</maven.version>
-    <scala.version>2.11.12</scala.version>
-    <scala.binary.version>2.11</scala.binary.version>
+<!--    <scala.version>2.11.12</scala.version>-->
+<!--    <scala.binary.version>2.11</scala.binary.version>-->
+    <scala.version>2.12.8</scala.version>
+    <scala.binary.version>2.12</scala.binary.version>
     <kafka.version>2.0.1</kafka.version>
     <MaxPermGen>512m</MaxPermGen>
     <CodeCacheSize>512m</CodeCacheSize>
@@ -123,7 +126,7 @@
     -->
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-scala_2.11</artifactId>
+      <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
       <version>${jackson.version}</version>
       <scope>test</scope>
     </dependency>
@@ -240,7 +243,7 @@
     <dependency>
       <groupId>org.scalacheck</groupId>
       <artifactId>scalacheck_${scala.binary.version}</artifactId>
-      <version>1.12.5</version>
+      <version>1.12.6</version>
     </dependency>
 
     <dependency>
@@ -518,9 +521,9 @@
             <requireJavaVersion>
               <version>[${minJavaVersion}.0,${maxJavaVersion}.1000}]</version>
             </requireJavaVersion>
-            <requireOS>
-              <family>unix</family>
-            </requireOS>
+<!--            <requireOS>-->
+<!--              <family>unix</family>-->
+<!--            </requireOS>-->
           </rules>
         </configuration>
         <executions>

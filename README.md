@@ -1,3 +1,11 @@
+
+## Make the following changes (做下面的一些修改)
+
++ change scala version to 2.12
++ supports spark sql on hive table (支持 spark sql 操作 hive table)
+
+===
+
 [![Build Status](https://travis-ci.org/hortonworks-spark/spark-atlas-connector.svg?branch=master)](https://travis-ci.org/hortonworks-spark/spark-atlas-connector)
 
 Spark Atlas Connector
