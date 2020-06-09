@@ -21,8 +21,8 @@ import java.io.{BufferedWriter, File, FileWriter}
 import java.nio.file.Files
 
 import com.hortonworks.spark.atlas.sql.testhelper._
-import com.hortonworks.spark.atlas.types.external.KAFKA_TOPIC_STRING
-import com.hortonworks.spark.atlas.types.{external, metadata}
+import com.hortonworks.spark.atlas.types.externalOld.KAFKA_TOPIC_STRING
+import com.hortonworks.spark.atlas.types.{externalOld, metadata}
 import com.hortonworks.spark.atlas.utils.SparkUtils
 import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, TestUtils}
 import org.apache.atlas.model.instance.AtlasEntity
@@ -96,7 +96,7 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
       assert(entitySet.size == 13)
 
       // input path and output path (11 + 1)
-      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, external.FS_PATH_TYPE_STRING)
+      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, externalOld.FS_PATH_TYPE_STRING)
       assert(fsEntities.size === 12)
 
       val inputFsEntities = findFsEntities(fsEntities, srcDir)
@@ -107,10 +107,10 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
 
       // check for 'spark_process'
       assertEntitySparkProcessType(entitySet, queryDetails, inputs => {
-        val input = listAtlasEntitiesAsType(inputs, external.FS_PATH_TYPE_STRING)
+        val input = listAtlasEntitiesAsType(inputs, externalOld.FS_PATH_TYPE_STRING)
         TestUtils.assertSubsetOf(inputFsEntities.toSet, input.toSet)
       }, outputs => {
-        val output = getOnlyOneEntity(outputs, external.FS_PATH_TYPE_STRING)
+        val output = getOnlyOneEntity(outputs, externalOld.FS_PATH_TYPE_STRING)
         assert(output === outputFsEntities.head)
       })
     } finally {
@@ -294,7 +294,7 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
 
       assertEntitiesKafkaTopicType(topicsToReadWithClusterInfo, entitySet)
 
-      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, external.FS_PATH_TYPE_STRING)
+      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, externalOld.FS_PATH_TYPE_STRING)
       assert(fsEntities.size === 1)
 
       val outputFsEntities = findFsEntities(fsEntities, destDir)
@@ -338,7 +338,7 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
       assert(entitySet.size == 13)
 
       // input path and output path
-      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, external.FS_PATH_TYPE_STRING)
+      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, externalOld.FS_PATH_TYPE_STRING)
       assert(fsEntities.size === 11)
 
       val inputFsEntities = findFsEntities(fsEntities, srcDir)
@@ -415,7 +415,7 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
 
       assertEntitiesKafkaTopicType(topicsToReadWithClusterInfo, entitySet)
 
-      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, external.FS_PATH_TYPE_STRING)
+      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, externalOld.FS_PATH_TYPE_STRING)
       assert(fsEntities.size === 12)
 
       val inputFsEntities = findFsEntities(fsEntities, srcDir)
@@ -426,8 +426,8 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
 
       // check for 'spark_process'
       assertEntitySparkProcessType(entitySet, queryDetails, inputs => {
-        val kafkaInputs = listAtlasEntitiesAsType(inputs, external.KAFKA_TOPIC_STRING)
-        val fsInputs = listAtlasEntitiesAsType(inputs, external.FS_PATH_TYPE_STRING)
+        val kafkaInputs = listAtlasEntitiesAsType(inputs, externalOld.KAFKA_TOPIC_STRING)
+        val fsInputs = listAtlasEntitiesAsType(inputs, externalOld.FS_PATH_TYPE_STRING)
           // unfortunately each batch recognizes topics which topics are having records to process
         // so there's no guarantee that all topics are recognized as 'inputs' for 'spark_process'
         assertEntitiesAreSubsetOfTopics(topicsToReadWithClusterInfo, kafkaInputs)
@@ -500,7 +500,7 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
 
       assertEntitiesKafkaTopicType(topicsWithClusterInfo, entitySet)
 
-      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, external.FS_PATH_TYPE_STRING)
+      val fsEntities = listAtlasEntitiesAsType(entitySet.toSeq, externalOld.FS_PATH_TYPE_STRING)
       assert(fsEntities.size === 11)
 
       val inputFsEntities = findFsEntities(fsEntities, srcDir)
@@ -508,8 +508,8 @@ class SparkExecutionPlanProcessorForStreamingQuerySuite
 
       // check for 'spark_process'
       assertEntitySparkProcessType(entitySet, queryDetails, inputs => {
-        val kafkaInputs = listAtlasEntitiesAsType(inputs, external.KAFKA_TOPIC_STRING)
-        val fsInputs = listAtlasEntitiesAsType(inputs, external.FS_PATH_TYPE_STRING)
+        val kafkaInputs = listAtlasEntitiesAsType(inputs, externalOld.KAFKA_TOPIC_STRING)
+        val fsInputs = listAtlasEntitiesAsType(inputs, externalOld.FS_PATH_TYPE_STRING)
         // unfortunately each batch recognizes topics which topics are having records to process
         // so there's no guarantee that all topics are recognized as 'inputs' for 'spark_process'
         assertEntitiesAreSubsetOfTopics(topicsToReadWithClusterInfo, kafkaInputs)

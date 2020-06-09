@@ -21,7 +21,7 @@ import java.io.File
 
 import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, WithRemoteHiveMetastoreServiceSupport}
 import com.hortonworks.spark.atlas.sql.testhelper._
-import com.hortonworks.spark.atlas.types.external
+import com.hortonworks.spark.atlas.types.externalOld
 import org.apache.atlas.model.instance.AtlasObjectId
 import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
 
@@ -80,17 +80,17 @@ class SparkExecutionPlanProcessorForComplicatedQuerySuite
     val entities = atlasClient.createdEntities
 
     val expectedInputs = Set(
-      new AtlasObjectId(external.HIVE_TABLE_TYPE_STRING,
+      new AtlasObjectId(externalOld.HIVE_TABLE_TYPE_STRING,
         org.apache.atlas.AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME,
-        external.hiveTableUniqueAttribute(clusterName, dbName, table1)),
-      new AtlasObjectId(external.HIVE_TABLE_TYPE_STRING,
+        externalOld.hiveTableUniqueAttribute(clusterName, dbName, table1)),
+      new AtlasObjectId(externalOld.HIVE_TABLE_TYPE_STRING,
         org.apache.atlas.AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME,
-        external.hiveTableUniqueAttribute(clusterName, dbName, table2)))
+        externalOld.hiveTableUniqueAttribute(clusterName, dbName, table2)))
 
     val expectedOutputs = Set(
-      new AtlasObjectId(external.HIVE_TABLE_TYPE_STRING,
+      new AtlasObjectId(externalOld.HIVE_TABLE_TYPE_STRING,
         org.apache.atlas.AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME,
-        external.hiveTableUniqueAttribute(clusterName, dbName, table3)))
+        externalOld.hiveTableUniqueAttribute(clusterName, dbName, table3)))
 
     validateProcessEntityWithAtlasEntities(entities, _ => {}, expectedInputs, expectedOutputs)
 
@@ -108,11 +108,11 @@ class SparkExecutionPlanProcessorForComplicatedQuerySuite
     val entities2 = atlasClient.createdEntities
 
     val expectedInputs2 = Set(
-      new AtlasObjectId(external.HIVE_TABLE_TYPE_STRING,
+      new AtlasObjectId(externalOld.HIVE_TABLE_TYPE_STRING,
         org.apache.atlas.AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME,
-        external.hiveTableUniqueAttribute(clusterName, dbName, table3)))
+        externalOld.hiveTableUniqueAttribute(clusterName, dbName, table3)))
 
-    val output = getOnlyOneEntity(entities, external.FS_PATH_TYPE_STRING)
+    val output = getOnlyOneEntity(entities, externalOld.FS_PATH_TYPE_STRING)
     val dir = new File(outputPath).getAbsolutePath
     assertFsEntity(output, dir)
     val expectedOutputs2 = AtlasUtils.entitiesToReferences(Seq(output), useGuid = false)

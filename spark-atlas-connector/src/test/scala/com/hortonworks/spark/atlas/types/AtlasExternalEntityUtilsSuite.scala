@@ -55,15 +55,15 @@ class AtlasExternalEntityUtilsSuite
 
     val tableEntity = hiveAtlasEntityUtils.tableToEntity(tableDefinition, Some(dbDefinition))
     assert(tableEntity.isInstanceOf[SACAtlasEntityReference])
-    tableEntity.typeName should be (external.HIVE_TABLE_TYPE_STRING)
+    tableEntity.typeName should be (externalOld.HIVE_TABLE_TYPE_STRING)
     tableEntity.qualifiedName should be (s"db1.tbl1@${hiveAtlasEntityUtils.clusterName}")
   }
 
   test("convert path to entity") {
     val tempFile = Files.createTempFile("tmp", ".txt").toFile
-    val pathEntity = external.pathToEntity(tempFile.getAbsolutePath)
+    val pathEntity = externalOld.pathToEntity(tempFile.getAbsolutePath)
 
-    pathEntity.entity.getTypeName should be (external.FS_PATH_TYPE_STRING)
+    pathEntity.entity.getTypeName should be (externalOld.FS_PATH_TYPE_STRING)
     pathEntity.entity.getAttribute("name") should be (tempFile.getAbsolutePath.toLowerCase)
     pathEntity.entity.getAttribute("path") should be (tempFile.getAbsolutePath.toLowerCase)
     pathEntity.entity.getAttribute(AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME) should be (
@@ -74,9 +74,9 @@ class AtlasExternalEntityUtilsSuite
 
   test("convert jdbc properties to rdbms entity") {
     val tableName = "employee"
-    val rdbmsEntity = external.rdbmsTableToEntity("jdbc:mysql://localhost:3306/default", tableName)
+    val rdbmsEntity = externalOld.rdbmsTableToEntity("jdbc:mysql://localhost:3306/default", tableName)
 
-    rdbmsEntity.entity.getTypeName should be (external.RDBMS_TABLE)
+    rdbmsEntity.entity.getTypeName should be (externalOld.RDBMS_TABLE)
     rdbmsEntity.entity.getAttribute("name") should be (tableName)
     rdbmsEntity.entity.getAttribute("qualifiedName") should be ("default." + tableName)
 
@@ -87,9 +87,9 @@ class AtlasExternalEntityUtilsSuite
     val cluster = "primary"
     val tableName = "employee"
     val nameSpace = "default"
-    val hbaseEntity = external.hbaseTableToEntity(cluster, tableName, nameSpace)
+    val hbaseEntity = externalOld.hbaseTableToEntity(cluster, tableName, nameSpace)
 
-    hbaseEntity.entity.getTypeName should be (external.HBASE_TABLE_STRING)
+    hbaseEntity.entity.getTypeName should be (externalOld.HBASE_TABLE_STRING)
     hbaseEntity.entity.getAttribute("name") should be (tableName)
     hbaseEntity.entity.getAttribute(AtlasConstants.CLUSTER_NAME_ATTRIBUTE) should be (cluster)
     hbaseEntity.entity.getAttribute("uri") should be (nameSpace + ":" + tableName)
@@ -98,32 +98,32 @@ class AtlasExternalEntityUtilsSuite
   }
 
   test("convert s3 path to aws_s3 entities") {
-    val pathEntity = external.pathToEntity("s3://testbucket/testpseudodir/testfile")
+    val pathEntity = externalOld.pathToEntity("s3://testbucket/testpseudodir/testfile")
 
-    pathEntity.entity.getTypeName should be (external.S3_OBJECT_TYPE_STRING)
+    pathEntity.entity.getTypeName should be (externalOld.S3_OBJECT_TYPE_STRING)
     pathEntity.entity.getAttribute("name") should be ("testfile")
     pathEntity.entity.getAttribute("qualifiedName") should be (
       "s3://testbucket/testpseudodir/testfile")
 
     val deps = pathEntity.dependencies
-    val dirReference = deps.find(_.typeName == external.S3_PSEUDO_DIR_TYPE_STRING)
+    val dirReference = deps.find(_.typeName == externalOld.S3_PSEUDO_DIR_TYPE_STRING)
     assert(dirReference.isDefined)
     assert(dirReference.get.isInstanceOf[SACAtlasEntityWithDependencies])
 
     val dirEntity = dirReference.get.asInstanceOf[SACAtlasEntityWithDependencies]
-    dirEntity.entity.getTypeName should be (external.S3_PSEUDO_DIR_TYPE_STRING)
+    dirEntity.entity.getTypeName should be (externalOld.S3_PSEUDO_DIR_TYPE_STRING)
     dirEntity.entity.getAttribute("name") should be ("/testpseudodir/")
     dirEntity.entity.getAttribute("qualifiedName") should be (
       "s3://testbucket/testpseudodir/")
 
     pathEntity.entity.getAttribute("pseudoDirectory") should be (dirReference.get.asObjectId)
 
-    val bucketReference = dirEntity.dependencies.find(_.typeName == external.S3_BUCKET_TYPE_STRING)
+    val bucketReference = dirEntity.dependencies.find(_.typeName == externalOld.S3_BUCKET_TYPE_STRING)
     assert(bucketReference.isDefined)
     assert(bucketReference.get.isInstanceOf[SACAtlasEntityWithDependencies])
 
     val bucketEntity = bucketReference.get.asInstanceOf[SACAtlasEntityWithDependencies]
-    bucketEntity.entity.getTypeName should be (external.S3_BUCKET_TYPE_STRING)
+    bucketEntity.entity.getTypeName should be (externalOld.S3_BUCKET_TYPE_STRING)
     bucketEntity.entity.getAttribute("name") should be ("testbucket")
     bucketEntity.entity.getAttribute("qualifiedName") should be (
       "s3://testbucket")
@@ -147,9 +147,9 @@ class AtlasExternalEntityUtilsSuiteWithHDFSAsDefaultFileSystem
     // NOTE: WithHDFSSupport sets default file system to HDFS in spark session.
     // Spark relies on default file system when scheme is not specified,
     // so we are expecting given path as HDFS path, though we created file in local file system.
-    val pathEntity = external.pathToEntity(absPath)
+    val pathEntity = externalOld.pathToEntity(absPath)
 
-    pathEntity.entity.getTypeName should be (external.HDFS_PATH_TYPE_STRING)
+    pathEntity.entity.getTypeName should be (externalOld.HDFS_PATH_TYPE_STRING)
     pathEntity.entity.getAttribute("name") should be (absPath.toLowerCase(Locale.ROOT))
     pathEntity.entity.getAttribute("path") should be (absPath.toLowerCase(Locale.ROOT))
     pathEntity.entity.getAttribute(AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME) should be (

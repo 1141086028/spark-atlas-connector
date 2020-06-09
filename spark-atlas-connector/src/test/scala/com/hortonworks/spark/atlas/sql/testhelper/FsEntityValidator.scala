@@ -22,7 +22,7 @@ import java.util.Locale
 
 import com.hortonworks.spark.atlas.AtlasEntityReadHelper.{getStringAttribute, listAtlasEntitiesAsType}
 import com.hortonworks.spark.atlas.{SACAtlasEntityWithDependencies, SACAtlasReferenceable}
-import com.hortonworks.spark.atlas.types.external
+import com.hortonworks.spark.atlas.types.externalOld
 import org.apache.atlas.model.instance.AtlasEntity
 import org.scalatest.FunSuite
 
@@ -38,7 +38,7 @@ trait FsEntityValidator extends FunSuite {
   def assertEntitiesFsType(
       dirToExpectedCount: Map[File, Int],
       entities: Set[AtlasEntity]): Unit = {
-    val fsEntities = listAtlasEntitiesAsType(entities.toSeq, external.FS_PATH_TYPE_STRING)
+    val fsEntities = listAtlasEntitiesAsType(entities.toSeq, externalOld.FS_PATH_TYPE_STRING)
     assert(fsEntities.size === dirToExpectedCount.values.sum)
 
     dirToExpectedCount.foreach { case (dir, expectedCnt) =>
@@ -56,7 +56,7 @@ trait FsEntityValidator extends FunSuite {
   }
 
   def assertFsEntity(entity: AtlasEntity, path: String): Unit = {
-    assert(entity.getTypeName === external.FS_PATH_TYPE_STRING)
+    assert(entity.getTypeName === externalOld.FS_PATH_TYPE_STRING)
     assert(entity.getAttribute("name") === path.toLowerCase)
   }
 }

@@ -21,7 +21,7 @@ import java.util.UUID
 
 import com.hortonworks.spark.atlas.sql.KafkaTopicInformation
 import com.hortonworks.spark.atlas.sql.testhelper.CreateEntitiesTrackingAtlasClient
-import com.hortonworks.spark.atlas.types.{external, internal}
+import com.hortonworks.spark.atlas.types.{externalOld, internal}
 import org.apache.atlas.model.instance.AtlasEntity
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
 
@@ -47,10 +47,10 @@ class AtlasEntityCreationRequestHelperSuite
     val topic3 = KafkaTopicInformation("topic3")
     val topicSink = KafkaTopicInformation("topicSink")
 
-    val source1 = external.kafkaToEntity(cluster, topic1)
-    val source2 = external.kafkaToEntity(cluster, topic2)
-    val source3 = external.kafkaToEntity(cluster, topic3)
-    val sink = external.kafkaToEntity(cluster, topicSink)
+    val source1 = externalOld.kafkaToEntity(cluster, topic1)
+    val source2 = externalOld.kafkaToEntity(cluster, topic2)
+    val source3 = externalOld.kafkaToEntity(cluster, topic3)
+    val sink = externalOld.kafkaToEntity(cluster, topicSink)
 
     // source1
     validateInputsOutputs(queryId, Seq(source1), Seq(sink), expectNoCreationRequest = false)
@@ -88,10 +88,10 @@ class AtlasEntityCreationRequestHelperSuite
     val topic3 = KafkaTopicInformation("topic3")
     val topicSource = KafkaTopicInformation("topicSource")
 
-    val source = external.kafkaToEntity(cluster, topicSource)
-    val sink1 = external.kafkaToEntity(cluster, topic1)
-    val sink2 = external.kafkaToEntity(cluster, topic2)
-    val sink3 = external.kafkaToEntity(cluster, topic3)
+    val source = externalOld.kafkaToEntity(cluster, topicSource)
+    val sink1 = externalOld.kafkaToEntity(cluster, topic1)
+    val sink2 = externalOld.kafkaToEntity(cluster, topic2)
+    val sink3 = externalOld.kafkaToEntity(cluster, topic3)
 
     // sink1
     validateInputsOutputs(queryId, Seq(source), Seq(sink1), expectNoCreationRequest = false)

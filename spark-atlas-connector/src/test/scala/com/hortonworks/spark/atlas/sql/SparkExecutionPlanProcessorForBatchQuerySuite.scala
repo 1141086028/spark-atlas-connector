@@ -22,7 +22,7 @@ import java.nio.file.{Files, Path}
 import java.util.Locale
 
 import com.hortonworks.spark.atlas.sql.testhelper._
-import com.hortonworks.spark.atlas.types.{external, metadata}
+import com.hortonworks.spark.atlas.types.{externalOld, metadata}
 import com.hortonworks.spark.atlas.utils.SparkUtils
 import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils}
 import org.apache.atlas.model.instance.AtlasEntity
@@ -88,7 +88,7 @@ class SparkExecutionPlanProcessorForBatchQuerySuite
     assertTableEntity(tableEntity, outputTableName)
 
     // we're expecting one file system entities: input file
-    val fsEntities = listAtlasEntitiesAsType(entities, external.FS_PATH_TYPE_STRING)
+    val fsEntities = listAtlasEntitiesAsType(entities, externalOld.FS_PATH_TYPE_STRING)
     assert(fsEntities.size === 1)
 
     val databaseEntity = getOnlyOneEntity(entities, metadata.DB_TYPE_STRING)
@@ -117,7 +117,7 @@ class SparkExecutionPlanProcessorForBatchQuerySuite
       AtlasUtils.entitiesToReferences(Seq(tableEntity)))
   }
 
-  test("Create external table against JSON files") {
+  test("Create externalOld table against JSON files") {
     val planProcessor = new DirectProcessSparkExecutionPlanProcessor(atlasClient, atlasClientConf)
 
     val tempDirPath = writeJsonFilesToTempDirectory()
@@ -188,7 +188,7 @@ class SparkExecutionPlanProcessorForBatchQuerySuite
     assertTableEntity(tableEntity, inputTableName)
 
     // kafka topic
-    val outputKafkaEntity = getOnlyOneEntity(entities, external.KAFKA_TOPIC_STRING)
+    val outputKafkaEntity = getOnlyOneEntity(entities, externalOld.KAFKA_TOPIC_STRING)
     val expectedTopics = Seq(
       KafkaTopicInformation(outputTopicName, Some(customClusterName))
     )
@@ -258,7 +258,7 @@ class SparkExecutionPlanProcessorForBatchQuerySuite
     // kafka topic
 
     // actual topics in 'subscribePattern' cannot be retrieved - it's a limitation
-    val inputKafkaEntities = listAtlasEntitiesAsType(entities, external.KAFKA_TOPIC_STRING)
+    val inputKafkaEntities = listAtlasEntitiesAsType(entities, externalOld.KAFKA_TOPIC_STRING)
     val expectedTopics = (topicsToRead2 ++ topicsToRead3).map(KafkaTopicInformation(_, None))
     assertEntitiesKafkaTopicType(expectedTopics, entities.toSet)
 
@@ -307,7 +307,7 @@ class SparkExecutionPlanProcessorForBatchQuerySuite
     val entities = atlasClient.createdEntities
 
     // kafka topic
-    val kafkaEntities = listAtlasEntitiesAsType(entities, external.KAFKA_TOPIC_STRING)
+    val kafkaEntities = listAtlasEntitiesAsType(entities, externalOld.KAFKA_TOPIC_STRING)
     assert(kafkaEntities.size === topicsToRead.length + 1)
 
     val inputKafkaEntities = kafkaEntities.filter { entity =>

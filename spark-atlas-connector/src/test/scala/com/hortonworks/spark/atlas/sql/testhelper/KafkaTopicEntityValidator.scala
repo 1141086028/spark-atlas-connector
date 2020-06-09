@@ -21,7 +21,7 @@ import com.hortonworks.spark.atlas.TestUtils
 import com.hortonworks.spark.atlas.sql.KafkaTopicInformation
 import org.scalatest.FunSuite
 import com.hortonworks.spark.atlas.AtlasEntityReadHelper.{getStringAttribute, listAtlasEntitiesAsType}
-import com.hortonworks.spark.atlas.types.external.KAFKA_TOPIC_STRING
+import com.hortonworks.spark.atlas.types.externalOld.KAFKA_TOPIC_STRING
 import org.apache.atlas.model.instance.AtlasEntity
 
 trait KafkaTopicEntityValidator extends FunSuite {

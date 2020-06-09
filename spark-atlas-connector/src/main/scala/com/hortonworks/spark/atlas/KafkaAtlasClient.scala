@@ -51,6 +51,16 @@ class KafkaAtlasClient(atlasClientConf: AtlasClientConf) extends AtlasHook with 
     throw new UnsupportedOperationException("Kafka atlas client doesn't support update type defs")
   }
 
+
+  override protected def doCreateAtlasEntitiesWithExtInfo(
+      entitiesWithExtInfos: Seq[AtlasEntitiesWithExtInfo]): Unit = {
+    entitiesWithExtInfos.foreach(entitiesWithExtInfo => {
+      val createRequest = new EntityCreateRequestV2(
+        SparkUtils.currUser(), entitiesWithExtInfo): HookNotification
+      notifyEntities(Seq(createRequest).asJava, SparkUtils.ugi())
+    })
+  }
+
   override protected def doCreateEntities(entities: Seq[AtlasEntity]): Unit = {
     val entitiesWithExtInfo = new AtlasEntitiesWithExtInfo()
     entities.foreach(entitiesWithExtInfo.addEntity)

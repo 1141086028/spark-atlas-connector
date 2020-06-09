@@ -23,7 +23,7 @@ import java.sql.DriverManager
 import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, WithHiveSupport}
 import com.hortonworks.spark.atlas.AtlasEntityReadHelper._
 import com.hortonworks.spark.atlas.sql.testhelper.{AtlasQueryExecutionListener, CreateEntitiesTrackingAtlasClient, DirectProcessSparkExecutionPlanProcessor, ProcessEntityValidator}
-import com.hortonworks.spark.atlas.types.{external, metadata}
+import com.hortonworks.spark.atlas.types.{externalOld, metadata}
 import org.apache.atlas.model.instance.AtlasEntity
 
 class SparkExecutionPlanProcessForRdbmsQuerySuite
@@ -77,7 +77,7 @@ class SparkExecutionPlanProcessForRdbmsQuerySuite
 
     // we're expecting two table entities:
     // one from the source table and another from the sink table
-    val tableEntities = listAtlasEntitiesAsType(entities, external.RDBMS_TABLE)
+    val tableEntities = listAtlasEntitiesAsType(entities, externalOld.RDBMS_TABLE)
     assert(tableEntities.size === 2)
 
     val inputEntity = getOnlyOneEntityOnAttribute(tableEntities, "name", sourceTableName)

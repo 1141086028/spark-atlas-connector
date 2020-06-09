@@ -22,7 +22,7 @@ import java.nio.file.Files
 
 import com.hortonworks.spark.atlas._
 import com.hortonworks.spark.atlas.sql.testhelper._
-import com.hortonworks.spark.atlas.types.external
+import com.hortonworks.spark.atlas.types.externalOld
 import org.apache.atlas.model.instance.AtlasObjectId
 import org.apache.spark.sql.execution.command.{CreateViewCommand, ExecutedCommandExec}
 import org.apache.spark.sql.kafka010.KafkaTestUtils
@@ -112,13 +112,13 @@ class SparkExecutionPlanProcessorWithRemoteHiveMetastoreServiceSuite
     planProcessor.process(queryDetail)
     val entities = atlasClient.createdEntities
 
-    val input = getOnlyOneEntity(entities, external.FS_PATH_TYPE_STRING)
+    val input = getOnlyOneEntity(entities, externalOld.FS_PATH_TYPE_STRING)
     val expectedInputs = AtlasUtils.entitiesToReferences(Seq(input), useGuid = false)
 
     val expectedOutputs = Set(
-      new AtlasObjectId(external.HIVE_TABLE_TYPE_STRING,
+      new AtlasObjectId(externalOld.HIVE_TABLE_TYPE_STRING,
         org.apache.atlas.AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME,
-        external.hiveTableUniqueAttribute(clusterName, dbName, sourceTblName)))
+        externalOld.hiveTableUniqueAttribute(clusterName, dbName, sourceTblName)))
 
     validateProcessEntityWithAtlasEntities(entities, _ => {}, expectedInputs, expectedOutputs)
   }
@@ -135,11 +135,11 @@ class SparkExecutionPlanProcessorWithRemoteHiveMetastoreServiceSuite
     val entities = atlasClient.createdEntities
 
     val expectedInputs = Set(
-      new AtlasObjectId(external.HIVE_TABLE_TYPE_STRING,
+      new AtlasObjectId(externalOld.HIVE_TABLE_TYPE_STRING,
         org.apache.atlas.AtlasClient.REFERENCEABLE_ATTRIBUTE_NAME,
-        external.hiveTableUniqueAttribute(clusterName, dbName, sourceTblName)))
+        externalOld.hiveTableUniqueAttribute(clusterName, dbName, sourceTblName)))
 
-    val output = getOnlyOneEntity(entities, external.FS_PATH_TYPE_STRING)
+    val output = getOnlyOneEntity(entities, externalOld.FS_PATH_TYPE_STRING)
     val dir = new File("target/dir1").getAbsolutePath
     assertFsEntity(output, dir)
     val expectedOutputs = AtlasUtils.entitiesToReferences(Seq(output), useGuid = false)

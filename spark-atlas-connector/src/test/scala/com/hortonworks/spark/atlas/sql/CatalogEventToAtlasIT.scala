@@ -72,7 +72,7 @@ class CatalogEventToAtlasIT extends BaseResourceIT with Matchers {
       entity.getAttribute("ownerType") should be ("USER")
     }
 
-    // Drop DB from external catalog to make sure we also delete the corresponding Atlas entity
+    // Drop DB from externalOld catalog to make sure we also delete the corresponding Atlas entity
     SparkUtils.getExternalCatalog().dropDatabase(dbName, ignoreIfNotExists = true, cascade = false)
     processor.pushEvent(DropDatabaseEvent(dbName))
     eventually(timeout(30 seconds), interval(100 milliseconds)) {

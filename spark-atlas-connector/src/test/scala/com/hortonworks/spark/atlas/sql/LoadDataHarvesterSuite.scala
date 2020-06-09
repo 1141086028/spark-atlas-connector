@@ -23,7 +23,7 @@ import java.nio.file.Files
 import scala.util.Random
 import org.apache.spark.sql.execution.LeafExecNode
 import org.apache.spark.sql.execution.command.{ExecutedCommandExec, LoadDataCommand}
-import com.hortonworks.spark.atlas.types.external
+import com.hortonworks.spark.atlas.types.externalOld
 import com.hortonworks.spark.atlas._
 import com.hortonworks.spark.atlas.sql.testhelper.BaseHarvesterSuite
 import org.apache.spark.sql.SparkSession
@@ -61,7 +61,7 @@ abstract class BaseLoadDataHarvesterSuite
     validateProcessEntity(entities.head, _ => {}, inputs => {
       inputs.size should be (1)
       val inputEntity = inputs.head.asInstanceOf[SACAtlasEntityWithDependencies].entity
-      inputEntity.getTypeName should be (external.FS_PATH_TYPE_STRING)
+      inputEntity.getTypeName should be (externalOld.FS_PATH_TYPE_STRING)
       inputEntity.getAttribute("name") should be (file.getAbsolutePath.toLowerCase)
     }, outputs => {
       outputs.size should be (1)

@@ -17,6 +17,7 @@
 
 package com.hortonworks.spark.atlas
 
+import java.util
 import java.util.concurrent.atomic.AtomicLong
 
 import com.hortonworks.spark.atlas.utils.Logging
@@ -26,11 +27,13 @@ object AtlasUtils extends Logging {
   private val executionId = new AtomicLong(0L)
 
   def entityToReference(entity: AtlasEntity, useGuid: Boolean = false): AtlasObjectId = {
-    if (useGuid) {
-      new AtlasObjectId(entity.getGuid)
-    } else {
-      new AtlasObjectId(entity.getTypeName, "qualifiedName", entity.getAttribute("qualifiedName"))
-    }
+//    if (useGuid) {
+//      new AtlasObjectId(entity.getGuid)
+//    } else {
+//      new AtlasObjectId(entity.getTypeName, "qualifiedName", entity.getAttribute("qualifiedName"))
+//    }
+
+    new AtlasObjectId(entity.getGuid, entity.getTypeName, new util.HashMap[String, Object]() {{ put("qualifiedName", entity.getAttribute("qualifiedName")); }})
   }
 
   def entitiesToReferences(

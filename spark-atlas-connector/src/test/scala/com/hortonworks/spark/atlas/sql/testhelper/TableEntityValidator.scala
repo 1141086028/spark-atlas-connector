@@ -17,7 +17,7 @@
 
 package com.hortonworks.spark.atlas.sql.testhelper
 
-import com.hortonworks.spark.atlas.types.{external, metadata}
+import com.hortonworks.spark.atlas.types.{externalOld, metadata}
 import com.hortonworks.spark.atlas.{SACAtlasEntityReference, SACAtlasEntityWithDependencies, SACAtlasReferenceable}
 import org.apache.atlas.AtlasClient
 import org.scalatest.FunSuite
@@ -77,7 +77,7 @@ trait TableEntityValidator extends FunSuite {
                        clusterName: String): Unit = {
     assert(ref.isInstanceOf[SACAtlasEntityReference])
     val outputRef = ref.asInstanceOf[SACAtlasEntityReference]
-    assert(outputRef.typeName === external.HIVE_TABLE_TYPE_STRING)
+    assert(outputRef.typeName === externalOld.HIVE_TABLE_TYPE_STRING)
     assert(outputRef.qualifiedName === s"$dbName.$tblName@$clusterName")
   }
 
@@ -88,7 +88,7 @@ trait TableEntityValidator extends FunSuite {
                                      clusterName: String): Unit = {
     assert(ref.isInstanceOf[SACAtlasEntityReference])
     val outputRef = ref.asInstanceOf[SACAtlasEntityReference]
-    assert(outputRef.typeName === external.HIVE_TABLE_TYPE_STRING)
+    assert(outputRef.typeName === externalOld.HIVE_TABLE_TYPE_STRING)
     assert(outputRef.qualifiedName.startsWith(s"$dbName.$tblNamePrefix"))
     assert(outputRef.qualifiedName.endsWith(s"@$clusterName"))
   }
