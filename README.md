@@ -1,3 +1,10 @@
+# 修改说明：
+
++ [wForget/spark-atlas-connector/tree/dev-hive](https://github.com/wForget/spark-atlas-connector/tree/dev-hive) 分支，重写 external 的实现，更好的支持 spark sql 操作 hive table 时产生的元数据。
++ [wForget/spark-atlas-connector/tree/dev](https://github.com/wForget/spark-atlas-connector/tree/dev) 分支，扩展 external hiveTableToReference 方法，生成 spark 类型的 entity，解决spark sql 操作 hive table 时 no found entity 的错误（建议使用 [dev-hive 分支](https://github.com/wForget/spark-atlas-connector/tree/dev-hive)）。
+
+---
+
 [![Build Status](https://travis-ci.org/hortonworks-spark/spark-atlas-connector.svg?branch=master)](https://travis-ci.org/hortonworks-spark/spark-atlas-connector)
 
 Spark Atlas Connector
