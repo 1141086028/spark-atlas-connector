@@ -26,12 +26,14 @@ import com.hortonworks.spark.atlas.types.external
 import org.apache.atlas.model.instance.AtlasObjectId
 import org.apache.spark.sql.execution.command.{CreateViewCommand, ExecutedCommandExec}
 import org.apache.spark.sql.kafka010.KafkaTestUtils
-import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
 
 import scala.util.Random
 
 class SparkExecutionPlanProcessorWithRemoteHiveMetastoreServiceSuite
-  extends FunSuite
+  extends AnyFunSuite
   with BeforeAndAfterEach
   with Matchers
   with WithRemoteHiveMetastoreServiceSupport

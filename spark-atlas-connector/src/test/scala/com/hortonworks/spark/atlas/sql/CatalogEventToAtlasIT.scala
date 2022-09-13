@@ -26,8 +26,9 @@ import org.apache.atlas.AtlasServiceException
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.types.{IntegerType, StringType, StructType}
-import org.scalatest.Matchers
 import org.scalatest.concurrent.Eventually._
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
 import com.hortonworks.spark.atlas.utils.SparkUtils
 import com.hortonworks.spark.atlas.{BaseResourceIT, RestAtlasClient, TestUtils}

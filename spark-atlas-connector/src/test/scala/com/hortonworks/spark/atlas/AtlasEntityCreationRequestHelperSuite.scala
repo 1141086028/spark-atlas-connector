@@ -22,11 +22,11 @@ import java.util.UUID
 import com.hortonworks.spark.atlas.sql.KafkaTopicInformation
 import com.hortonworks.spark.atlas.sql.testhelper.CreateEntitiesTrackingAtlasClient
 import com.hortonworks.spark.atlas.types.{external, internal}
-import org.apache.atlas.model.instance.AtlasEntity
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 
 class AtlasEntityCreationRequestHelperSuite
-  extends FunSuite
+  extends AnyFunSuite
   with WithHiveSupport
   with BeforeAndAfterEach {
 

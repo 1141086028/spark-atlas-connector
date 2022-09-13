@@ -18,15 +18,16 @@
 package com.hortonworks.spark.atlas.sql
 
 import scala.util.Random
-import org.scalatest.{FunSuite, Matchers}
 import org.apache.atlas.model.instance.AtlasEntity
 import com.hortonworks.spark.atlas.AtlasEntityReadHelper._
 import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, WithHiveSupport}
 import com.hortonworks.spark.atlas.sql.testhelper.{AtlasQueryExecutionListener, CreateEntitiesTrackingAtlasClient, DirectProcessSparkExecutionPlanProcessor, ProcessEntityValidator}
 import com.hortonworks.spark.atlas.types.metadata
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
 
 class SparkExecutionPlanProcessorForViewSuite
-  extends FunSuite
+  extends AnyFunSuite
   with Matchers
   with WithHiveSupport
   with ProcessEntityValidator {

@@ -23,10 +23,12 @@ import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, WithRemoteHiveM
 import com.hortonworks.spark.atlas.sql.testhelper._
 import com.hortonworks.spark.atlas.types.external
 import org.apache.atlas.model.instance.AtlasObjectId
-import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
 
 class SparkExecutionPlanProcessorForComplicatedQuerySuite
-  extends FunSuite
+  extends AnyFunSuite
   with BeforeAndAfterEach
   with Matchers
   with WithRemoteHiveMetastoreServiceSupport

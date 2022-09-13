@@ -21,15 +21,12 @@ import java.nio.file.Files
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
-
-import org.apache.atlas.AtlasServiceException
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.types.{IntegerType, StringType, StructType}
 import org.scalatest.concurrent.Eventually.{eventually, interval, timeout}
-import org.scalatest.Matchers
-
 import com.hortonworks.spark.atlas.utils.SparkUtils
+import org.scalatest.matchers.should.Matchers
 
 class KafkaClientIT extends BaseResourceIT with Matchers {
   import TestUtils._

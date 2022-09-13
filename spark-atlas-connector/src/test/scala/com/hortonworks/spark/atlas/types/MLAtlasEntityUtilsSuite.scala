@@ -26,11 +26,13 @@ import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.MinMaxScaler
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.sql.types.{IntegerType, StringType, StructType}
-import org.scalatest.{FunSuite, Matchers}
 import com.hortonworks.spark.atlas.TestUtils._
 import com.hortonworks.spark.atlas.{AtlasUtils, WithHiveSupport}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
-class MLAtlasEntityUtilsSuite extends FunSuite with Matchers with WithHiveSupport {
+class MLAtlasEntityUtilsSuite extends AnyFunSuite with Matchers with WithHiveSupport {
 
   def getTableEntity(tableName: String): AtlasEntity = {
     val dbDefinition = createDB("db1", "hdfs:///test/db/db1")

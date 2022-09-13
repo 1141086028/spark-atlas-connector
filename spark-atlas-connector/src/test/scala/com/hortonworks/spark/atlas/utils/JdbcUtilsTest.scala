@@ -17,9 +17,12 @@
 
 package com.hortonworks.spark.atlas.utils
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
-class JdbcUtilsTest extends FunSuite with Matchers {
+
+class JdbcUtilsTest extends AnyFunSuite with Matchers {
 
   test("get database name from mysql url") {
     val dbName = JdbcUtils.getDatabaseName("jdbc:mysql://localhost:3306/testdb")

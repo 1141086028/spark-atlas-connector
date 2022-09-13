@@ -20,8 +20,11 @@ package com.hortonworks.spark.atlas.utils
 import org.apache.hadoop.hive.conf.HiveConf
 import org.apache.spark.sql.SparkSession
 import org.scalatest._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
-class SparkUtilsSuite extends FunSuite with Matchers with BeforeAndAfter {
+class SparkUtilsSuite extends AnyFunSuite with Matchers with BeforeAndAfter {
 
   var sparkSession: SparkSession = _
 

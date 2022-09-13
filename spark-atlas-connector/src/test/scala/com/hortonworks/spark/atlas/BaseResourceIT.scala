@@ -24,9 +24,10 @@ import org.apache.atlas.model.SearchFilter
 import org.apache.atlas.model.instance.AtlasEntity
 import org.apache.atlas.model.typedef.{AtlasStructDef, AtlasTypesDef}
 import org.apache.atlas.utils.AuthenticationUtil
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, FunSuite}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
-abstract class BaseResourceIT extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
+abstract class BaseResourceIT extends AnyFunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
 
   protected var atlasUrls: Array[String] = null
   private var client: AtlasClientV2 = null

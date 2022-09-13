@@ -29,6 +29,7 @@ import org.apache.spark.sql.hive.execution.CreateHiveTableAsSelectCommand
 import com.hortonworks.spark.atlas.types.metadata
 import com.hortonworks.spark.atlas.{WithHiveSupport, WithRemoteHiveMetastoreServiceSupport}
 import org.apache.spark.sql.SparkSession
+import org.scalatest.matchers.should.Matchers._
 
 abstract class BaseCreateHiveTableAsSelectHarvesterSuite
   extends BaseHarvesterSuite

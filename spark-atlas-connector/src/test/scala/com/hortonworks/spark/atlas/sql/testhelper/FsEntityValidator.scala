@@ -24,9 +24,9 @@ import com.hortonworks.spark.atlas.AtlasEntityReadHelper.{getStringAttribute, li
 import com.hortonworks.spark.atlas.{SACAtlasEntityWithDependencies, SACAtlasReferenceable}
 import com.hortonworks.spark.atlas.types.external
 import org.apache.atlas.model.instance.AtlasEntity
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-trait FsEntityValidator extends FunSuite {
+trait FsEntityValidator extends AnyFunSuite {
 
   def findFsEntities(entities: Seq[AtlasEntity], dir: File): Seq[AtlasEntity] = {
     entities.filter { e =>

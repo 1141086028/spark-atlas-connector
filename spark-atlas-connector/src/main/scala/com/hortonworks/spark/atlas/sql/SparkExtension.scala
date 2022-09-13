@@ -52,6 +52,9 @@ case class SparkAtlasConnectorParser(spark: SparkSession, delegate: ParserInterf
 
   override def parseDataType(sqlText: String): DataType =
     delegate.parseDataType(sqlText)
+
+  override def parseMultipartIdentifier(sqlText: String): Seq[String] =
+    delegate.parseMultipartIdentifier(sqlText)
 }
 
 object SQLQuery {

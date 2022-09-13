@@ -28,12 +28,14 @@ import org.apache.spark.sql.catalyst.catalog.{CatalogTable, CatalogTableType}
 import org.apache.spark.sql.execution.command.CreateDataSourceTableAsSelectCommand
 import org.apache.spark.sql.execution.datasources.DataSource
 import org.apache.spark.sql.types.StructType
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+
 
 // This is not leveraging BaseHarvesterSuite, as it doesn't need to be tested with
 // both non-remote HMS and remote HMS cases.
 class CreateDataSourceTableAsSelectHarvesterSuite
-    extends FunSuite with Matchers with WithHiveSupport {
+    extends AnyFunSuite with Matchers with WithHiveSupport {
 
   private val sourceTblName = "source_" + Random.nextInt(100000)
 
