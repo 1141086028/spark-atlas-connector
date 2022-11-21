@@ -15,15 +15,18 @@
  * limitations under the License.
  */
 
-package com.hortonworks.spark.atlas.types
+package com.hortonworks.spark.atlas.sql
 
-object metadata {
-  val METADATA_VERSION = "1.0"
-  val DB_TYPE_STRING = "spark_db"
-  val STORAGEDESC_TYPE_STRING = "spark_storagedesc"
-  val TABLE_TYPE_STRING = "spark_table"
-  val PROCESS_TYPE_STRING = "spark_process"
-  val ML_DIRECTORY_TYPE_STRING = "spark_ml_directory"
-  val ML_PIPELINE_TYPE_STRING = "spark_ml_pipeline"
-  val ML_MODEL_TYPE_STRING = "spark_ml_model"
+/**
+ * @auther: zhiqiang Yu
+ * @date: 2022/11/20 23:31
+ * @description: hello word!!!
+ */
+case class KafkaTopicInformation(topicName: String, clusterName: Option[String] = None)
+
+object KafkaTopicInformation {
+  def getQualifiedName(ti: KafkaTopicInformation, defaultClusterName: String): String = {
+    val cName = ti.clusterName.getOrElse(defaultClusterName)
+    s"${ti.topicName}@$cName"
+  }
 }

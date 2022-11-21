@@ -18,12 +18,13 @@
 package com.hortonworks.spark.atlas
 
 import scala.util.control.NonFatal
-
 import com.sun.jersey.core.util.MultivaluedMapImpl
 import org.apache.atlas.model.instance.AtlasEntity
 import org.apache.atlas.model.typedef.AtlasTypesDef
-
 import com.hortonworks.spark.atlas.utils.Logging
+import org.apache.atlas.model.instance.AtlasEntity.AtlasEntitiesWithExtInfo
+
+import scala.collection.mutable.ArrayBuffer
 
 trait AtlasClient extends Logging {
 
@@ -32,6 +33,85 @@ trait AtlasClient extends Logging {
   def getAtlasTypeDefs(searchParams: MultivaluedMapImpl): AtlasTypesDef
 
   def updateAtlasTypeDefs(typeDefs: AtlasTypesDef): Unit
+
+  final def createEntitiesWithDependencies(
+    entity: SACAtlasReferenceable): Unit = this.synchronized {
+    entity match {
+      case e: SACAtlasEntityWithDependencies =>
+        // handle dependencies first
+        val deps = e.dependencies.filter(_.isInstanceOf[SACAtlasEntityWithDependencies])
+          .map(_.asInstanceOf[SACAtlasEntityWithDependencies])
+        var exts: Seq[AtlasEntity] = null
+        if (deps.nonEmpty) {
+          exts = getExtEntities(deps)
+        }
+        if (exts != null && exts.nonEmpty) {
+          val entitiesWithExtInfo = new AtlasEntitiesWithExtInfo()
+          entitiesWithExtInfo.addEntity(e.entity)
+          exts.foreach(entitiesWithExtInfo.addReferredEntity(_))
+          doCreateAtlasEntitiesWithExtInfo(Seq(entitiesWithExtInfo))
+        } else {
+          createEntities(Seq(e.entity))
+        }
+      case _ => // don't request creation entity for reference
+    }
+  }
+
+  def getExtEntities(deps: Seq[SACAtlasReferenceable]): Seq[AtlasEntity] = {
+    val entities = ArrayBuffer[AtlasEntity]()
+    if (deps == null || deps.isEmpty) {
+      entities
+    } else {
+      deps.foreach(item => {
+        if (item.isInstanceOf[SACAtlasEntityWithDependencies]) {
+          val e = item.asInstanceOf[SACAtlasEntityWithDependencies]
+          entities += e.entity
+          if (e.dependencies.nonEmpty) entities ++= getExtEntities(e.dependencies)
+        }
+      })
+      //      deps foreach {
+      //        case e: SACAtlasEntityWithDependencies =>
+      //          entities += e.entity
+      //          if (e.dependencies.nonEmpty) entities ++= getExtEntities(e.dependencies)
+      //        case _ =>
+      //      }
+      entities
+    }
+  }
+
+  //  final def createEntitiesWithDependencies(
+  //      entity: SACAtlasReferenceable): Unit = this.synchronized {
+  //    entity match {
+  //      case e: SACAtlasEntityWithDependencies =>
+  //        // handle dependencies first
+  //        if (e.dependencies.nonEmpty) {
+  //          val deps = e.dependencies.filter(_.isInstanceOf[SACAtlasEntityWithDependencies])
+  //            .map(_.asInstanceOf[SACAtlasEntityWithDependencies])
+  //
+  //          val depsHavingAnotherDeps = deps.filter(_.dependencies.nonEmpty)
+  //          val depsHavingNoDeps = deps.filterNot(_.dependencies.nonEmpty)
+  //
+  //          // we should handle them one by one if they're having additional dependencies
+  //          depsHavingAnotherDeps.foreach(createEntitiesWithDependencies)
+  //
+  //          // otherwise, we can handle them at once
+  //          createEntities(depsHavingNoDeps.map(_.entity))
+  //        }
+  //
+  //        // done with dependencies, process origin entity
+  //        createEntities(Seq(e.entity))
+  //
+  //      case _ => // don't request creation entity for reference
+  //    }
+  //  }
+
+  final def createEntitiesWithDependencies(
+    entities: Seq[SACAtlasReferenceable]): Unit = this.synchronized {
+    entities.foreach(createEntitiesWithDependencies)
+  }
+
+  protected def doCreateAtlasEntitiesWithExtInfo
+  (entitiesWithExtInfos: Seq[AtlasEntitiesWithExtInfo]): Unit = {}
 
   final def createEntities(entities: Seq[AtlasEntity]): Unit = this.synchronized {
     if (entities.isEmpty) {
@@ -49,7 +129,7 @@ trait AtlasClient extends Logging {
   protected def doCreateEntities(entities: Seq[AtlasEntity]): Unit
 
   final def deleteEntityWithUniqueAttr(
-      entityType: String, attribute: String): Unit = this.synchronized {
+    entityType: String, attribute: String): Unit = this.synchronized {
     try {
       doDeleteEntityWithUniqueAttr(entityType, attribute)
     } catch {
@@ -61,9 +141,9 @@ trait AtlasClient extends Logging {
   protected def doDeleteEntityWithUniqueAttr(entityType: String, attribute: String): Unit
 
   final def updateEntityWithUniqueAttr(
-      entityType: String,
-      attribute: String,
-      entity: AtlasEntity): Unit = this.synchronized {
+    entityType: String,
+    attribute: String,
+    entity: AtlasEntity): Unit = this.synchronized {
     try {
       doUpdateEntityWithUniqueAttr(entityType, attribute, entity)
     } catch {
@@ -74,9 +154,9 @@ trait AtlasClient extends Logging {
   }
 
   protected def doUpdateEntityWithUniqueAttr(
-      entityType: String,
-      attribute: String,
-      entity: AtlasEntity): Unit
+    entityType: String,
+    attribute: String,
+    entity: AtlasEntity): Unit
 }
 
 object AtlasClient {
