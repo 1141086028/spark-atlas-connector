@@ -32,11 +32,14 @@ import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.types.{LongType, StringType, StructType}
 import org.scalatest.concurrent.Eventually._
-import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import com.hortonworks.spark.atlas.{AtlasClient, AtlasClientConf, TestUtils}
 import com.hortonworks.spark.atlas.utils.SparkUtils
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
-class SparkCatalogEventProcessorSuite extends FunSuite with Matchers with BeforeAndAfterAll {
+class SparkCatalogEventProcessorSuite extends AnyFunSuite with Matchers with BeforeAndAfterAll {
   import TestUtils._
 
   private var sparkSession: SparkSession = _

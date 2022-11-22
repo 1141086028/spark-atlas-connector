@@ -27,6 +27,7 @@ import com.hortonworks.spark.atlas.types.external
 import com.hortonworks.spark.atlas._
 import com.hortonworks.spark.atlas.sql.testhelper.BaseHarvesterSuite
 import org.apache.spark.sql.SparkSession
+import org.scalatest.matchers.should.Matchers._
 
 abstract class BaseLoadDataHarvesterSuite
   extends BaseHarvesterSuite {

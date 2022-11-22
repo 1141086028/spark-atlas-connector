@@ -20,11 +20,14 @@ package com.hortonworks.spark.atlas.types
 import org.apache.atlas.{AtlasClient, AtlasConstants}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
-import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
-import com.hortonworks.spark.atlas.{AtlasClientConf, SACAtlasEntityWithDependencies, AtlasUtils, TestUtils}
+import org.scalatest.BeforeAndAfterAll
+import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, SACAtlasEntityWithDependencies, TestUtils}
 import com.hortonworks.spark.atlas.utils.SparkUtils
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
-class SparkAtlasEntityUtilsSuite extends FunSuite with Matchers with BeforeAndAfterAll {
+class SparkAtlasEntityUtilsSuite extends AnyFunSuite with Matchers with BeforeAndAfterAll {
   import TestUtils._
 
   private var sparkSession: SparkSession = _

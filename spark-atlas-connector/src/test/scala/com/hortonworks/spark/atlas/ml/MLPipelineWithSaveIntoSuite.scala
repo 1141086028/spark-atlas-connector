@@ -22,7 +22,6 @@ import java.util
 
 import scala.util.Random
 import scala.collection.JavaConverters._
-import org.scalatest.Matchers
 import org.apache.commons.io.FileUtils
 import org.apache.atlas.model.instance.{AtlasEntity, AtlasObjectId}
 import org.apache.spark.ml.Pipeline
@@ -33,6 +32,8 @@ import org.apache.spark.sql.execution.datasources.InsertIntoHadoopFsRelationComm
 import com.hortonworks.spark.atlas._
 import com.hortonworks.spark.atlas.sql.{CommandsHarvester, QueryDetail}
 import com.hortonworks.spark.atlas.types.internal
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
 
 class MLPipelineWithSaveIntoSuite extends BaseResourceIT with Matchers with WithHiveSupport {

@@ -20,9 +20,9 @@ package com.hortonworks.spark.atlas.sql.testhelper
 import com.hortonworks.spark.atlas.types.{external, metadata}
 import com.hortonworks.spark.atlas.{SACAtlasEntityReference, SACAtlasEntityWithDependencies, SACAtlasReferenceable}
 import org.apache.atlas.AtlasClient
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-trait TableEntityValidator extends FunSuite {
+trait TableEntityValidator extends AnyFunSuite {
   def assertTable(
                    ref: SACAtlasReferenceable,
                    dbName: String,

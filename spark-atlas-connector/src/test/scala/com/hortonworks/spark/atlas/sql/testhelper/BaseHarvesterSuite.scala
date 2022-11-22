@@ -19,10 +19,12 @@ package com.hortonworks.spark.atlas.sql.testhelper
 
 import com.hortonworks.spark.atlas.{AtlasClientConf, SACAtlasReferenceable}
 import org.apache.spark.sql.SparkSession
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
 abstract class BaseHarvesterSuite
-  extends FunSuite
+  extends AnyFunSuite
   with Matchers
   with ProcessEntityValidator
   with TableEntityValidator {

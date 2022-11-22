@@ -22,6 +22,7 @@ import org.apache.spark.sql.execution.command.{CreateViewCommand, ExecutedComman
 import com.hortonworks.spark.atlas._
 import com.hortonworks.spark.atlas.sql.testhelper.BaseHarvesterSuite
 import org.apache.spark.sql.SparkSession
+import org.scalatest.matchers.should.Matchers._
 
 abstract class BaseCreateViewHarvesterSuite
   extends BaseHarvesterSuite {

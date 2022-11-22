@@ -22,11 +22,13 @@ import java.util.Locale
 
 import org.apache.atlas.{AtlasClient, AtlasConstants}
 import org.apache.spark.sql.types._
-import org.scalatest.{FunSuite, Matchers}
 import com.hortonworks.spark.atlas._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers._
 
 class AtlasExternalEntityUtilsSuite
-  extends FunSuite
+  extends AnyFunSuite
   with Matchers
   with WithRemoteHiveMetastoreServiceSupport {
   import TestUtils._
@@ -136,7 +138,7 @@ class AtlasExternalEntityUtilsSuite
 }
 
 class AtlasExternalEntityUtilsSuiteWithHDFSAsDefaultFileSystem
-  extends FunSuite
+  extends AnyFunSuite
   with Matchers
   with WithHDFSSupport {
 

@@ -25,6 +25,7 @@ import org.apache.spark.sql.hive.execution.InsertIntoHiveDirCommand
 import com.hortonworks.spark.atlas.{WithHiveSupport, WithRemoteHiveMetastoreServiceSupport}
 import com.hortonworks.spark.atlas.sql.testhelper.{BaseHarvesterSuite, FsEntityValidator}
 import org.apache.spark.sql.SparkSession
+import org.scalatest.matchers.should.Matchers._
 
 abstract class BaseInsertIntoHiveDirHarvesterSuite
   extends BaseHarvesterSuite

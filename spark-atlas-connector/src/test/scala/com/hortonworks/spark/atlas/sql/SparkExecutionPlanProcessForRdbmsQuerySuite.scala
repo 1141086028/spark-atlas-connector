@@ -17,7 +17,7 @@
 
 package com.hortonworks.spark.atlas.sql
 
-import org.scalatest.{BeforeAndAfter, FunSuite, Matchers}
+import org.scalatest.BeforeAndAfter
 import java.sql.DriverManager
 
 import com.hortonworks.spark.atlas.{AtlasClientConf, AtlasUtils, WithHiveSupport}
@@ -25,9 +25,11 @@ import com.hortonworks.spark.atlas.AtlasEntityReadHelper._
 import com.hortonworks.spark.atlas.sql.testhelper.{AtlasQueryExecutionListener, CreateEntitiesTrackingAtlasClient, DirectProcessSparkExecutionPlanProcessor, ProcessEntityValidator}
 import com.hortonworks.spark.atlas.types.{external, metadata}
 import org.apache.atlas.model.instance.AtlasEntity
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers
 
 class SparkExecutionPlanProcessForRdbmsQuerySuite
-  extends FunSuite
+  extends AnyFunSuite
   with Matchers
   with BeforeAndAfter
   with WithHiveSupport

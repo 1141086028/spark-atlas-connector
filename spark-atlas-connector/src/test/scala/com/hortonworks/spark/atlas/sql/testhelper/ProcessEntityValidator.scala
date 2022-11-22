@@ -23,11 +23,11 @@ import com.hortonworks.spark.atlas.AtlasEntityReadHelper.getOnlyOneEntity
 import com.hortonworks.spark.atlas.types.metadata
 
 import scala.collection.JavaConverters._
-import com.hortonworks.spark.atlas.{SACAtlasEntityWithDependencies, SACAtlasReferenceable, AtlasUtils, TestUtils}
+import com.hortonworks.spark.atlas.{AtlasUtils, SACAtlasEntityWithDependencies, SACAtlasReferenceable, TestUtils}
 import org.apache.atlas.model.instance.{AtlasEntity, AtlasObjectId}
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-trait ProcessEntityValidator extends FunSuite {
+trait ProcessEntityValidator extends AnyFunSuite {
   def validateProcessEntity(
                              process: SACAtlasReferenceable,
                              validateFnForProcess: AtlasEntity => Unit,
